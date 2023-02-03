@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "web-module-04"
+version = "0.1.0"
+description = ""
+authors = ["Vladislav <109065019+TimVladislav13010@users.noreply.github.com>"]
+readme = "README.md"
+packages = [{include = "web_module_04"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
