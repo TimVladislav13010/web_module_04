@@ -131,8 +131,7 @@ def save_data(data):
 
 def run_socket_server(ip, port):
     """
-    Запуск сокет сервера.
-    :param ip:
+    Запуск сокет сервера.    :param ip:
     :param port:
     :return:
     """
