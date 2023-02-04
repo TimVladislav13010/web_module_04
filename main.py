@@ -10,10 +10,18 @@ from http.server import HTTPServer, BaseHTTPRequestHandler
 from threading import Thread
 
 
+"""
+Простий веб додаток на 2 сторінки.
+index.html та message.html
+На сторінці message.html реалізовано отримання даних з форми,
+данні зберігаються в storage/data.json
+"""
+
+
 BASE_DIR = pathlib.Path()
-SERVER_IP = "127.0.0.1"
-SERVER_PORT = 5000
-BUFFER = 1024
+SERVER_IP = "127.0.0.1"  # ip socket server
+SERVER_PORT = 5000  # port socket server
+BUFFER = 1024  #
 
 
 def send_data_to_socket(body):
@@ -31,6 +39,10 @@ class HTTPHandler(BaseHTTPRequestHandler):
         self.end_headers()
 
     def do_GET(self):
+        """
+        Маршрутизація сторінок.
+        :return:
+        """
         route = urllib.parse.urlparse(self.path)
         match route.path:
             case "/":
@@ -47,6 +59,12 @@ class HTTPHandler(BaseHTTPRequestHandler):
                     self.send_html("error.html", 404)
 
     def send_html(self, filename, status_code=200):
+        """
+        Відправлення html сторінки.
+        :param filename:
+        :param status_code:
+        :return:
+        """
         self.send_response(status_code)
         self.send_header("Content-Type", "text/html")
         self.end_headers()
@@ -54,6 +72,11 @@ class HTTPHandler(BaseHTTPRequestHandler):
             self.wfile.write(f.read())
 
     def send_static(self, filename):
+        """
+        Відправлення статичних ресурсів за допомогою mimetypes.
+        :param filename:
+        :return:
+        """
         self.send_response(200)
         mime_type, *rest = mimetypes.guess_type(filename)
         if mime_type:
@@ -66,6 +89,13 @@ class HTTPHandler(BaseHTTPRequestHandler):
 
 
 def run(server=HTTPServer, handler=HTTPHandler):
+    """
+    Запсук сервера localhost.
+    Порт 3000
+    :param server:
+    :param handler:
+    :return:
+    """
     address = ("0.0.0.0", 3000)
     http_server = server(address, handler)
     try:
@@ -75,6 +105,11 @@ def run(server=HTTPServer, handler=HTTPHandler):
 
 
 def save_data(data):
+    """
+    Збереження данних з форми message.html у файл storage/data.json
+    :param data:
+    :return:
+    """
     body = urllib.parse.unquote_plus(data.decode())
     try:
         with open(BASE_DIR.joinpath("storage/data.json")) as fd_r:
@@ -95,6 +130,12 @@ def save_data(data):
 
 
 def run_socket_server(ip, port):
+    """
+    Запуск сокет сервера.
+    :param ip:
+    :param port:
+    :return:
+    """
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     server = ip, port
     server_socket.bind(server)
