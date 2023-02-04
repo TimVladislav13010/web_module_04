@@ -8,6 +8,9 @@ packages = [{include = "web_module_04"}]
 
 [tool.poetry.dependencies]
 python = "^3.10"
+datetime = "^5.0"
+logging = "^0.4.9.6"
+pathlib = "^1.0.1"
 
 
 [build-system]

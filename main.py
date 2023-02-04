@@ -76,25 +76,22 @@ def run(server=HTTPServer, handler=HTTPHandler):
 
 def save_data(data):
     body = urllib.parse.unquote_plus(data.decode())
-
-    with open(BASE_DIR.joinpath("storage/data.json")) as fd_r:
-        data = json.load(fd_r)
-
     try:
+        with open(BASE_DIR.joinpath("storage/data.json")) as fd_r:
+            data = json.load(fd_r)
+
         payload = {
             key: value for key, value in [el.split("=") for el in body.split("&")]
         }
         data[datetime.datetime.now().__str__()] = payload
 
-        with open(
-            BASE_DIR.joinpath("storage/data.json"), "w", encoding="utf-8"
-        ) as fd_w:
+        with open(BASE_DIR.joinpath("storage/data.json"), "w", encoding="utf-8") as fd_w:
             json.dump(data, fd_w, ensure_ascii=False, indent=4)
 
     except ValueError as err:
         logging.error(f"Field parse data {body} with error {err}")
     except OSError as err:
-        logging.error(f"Field write data {body} with error {err}")
+        logging.error(f"Field write or read data {body} with error {err}")
 
 
 def run_socket_server(ip, port):
